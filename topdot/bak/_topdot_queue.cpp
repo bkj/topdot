@@ -22,7 +22,7 @@
 #include <queue>
 #include <omp.h>
 
-#include "./sparse_dot_topn_source.h"
+#include "./_topdot.h"
 
 struct candidate {int index; double value;};
 
@@ -34,20 +34,17 @@ public:
     }
 };
 
-void sparse_dot_topn_source(int n_row,
-                        int n_col,
-                        int Ap[],
-                        int Aj[],
-                        double Ax[], //data of A
-                        int Bp[],
-                        int Bj[],
-                        double Bx[], //data of B
-                        int ntop,
-                        double lower_bound,
-                        int Cj[],
-                        double Cx[])
+void _topdot(
+        int n_row,
+        int n_col,
+        int Ap[], int Aj[], double Ax[],
+        int Bp[], int Bj[], double Bx[],
+        int k,
+        double lower_bound,
+        int Cj[], double Cx[]) 
 {
-    
+    std::cerr << "_topdot (queue)" << std::endl;
+       
     #pragma omp parallel for
     for(int i = 0; i < n_row; i++){
         std::vector<int>    next(n_col, -1);
@@ -94,13 +91,13 @@ void sparse_dot_topn_source(int n_row,
             sums[temp] =  0; //clear arrays
         }
 
-        int len = std::min(ntop, (int)pq.size());
+        int len = std::min(k, (int)pq.size());
 
-        for(int a = 0; a < len; a++){
+        for(int entry_idx = 0; entry_idx < len; entry_idx++){
             candidate c = pq.top();
             pq.pop();
-            Cj[i * ntop + a] = c.index;
-            Cx[i * ntop + a] = c.value;
+            Cj[i * k + entry_idx] = c.index;
+            Cx[i * k + entry_idx] = c.value;
         }
     }
     return;

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+#include <iostream>
 #include <vector>
 #include <limits>
 #include <algorithm>
@@ -79,33 +80,37 @@ void _topdot(
         }
 
         // Collect results
-        int num_out = 0;
+        int num_candidates = 0;
         for(int i = 0; i < length; i++){
             if(sums[head] > lower_bound){
                 candidate c;
                 c.index = head;
                 c.value = sums[head];
                 candidates.push_back(c);
-                num_out++;
+                num_candidates++;
             }
             
             head = next[head];
         }
         
         // Get top-k
-        if (num_out > k){
+        if (num_candidates > k){
             std::nth_element(
                 candidates.begin(),
                 candidates.begin() + k,
                 candidates.end(),
                 candidate_cmp
             );
-            num_out = k;
         }
         
-        for(int entry_idx = 0; entry_idx < num_out; entry_idx++){
-            Cj[row * k + entry_idx] = candidates[entry_idx].index;
-            Cx[row * k + entry_idx] = candidates[entry_idx].value;
+        for(int entry_idx = 0; entry_idx < k; entry_idx++){
+            if(entry_idx < num_candidates) {
+                Cj[row * k + entry_idx] = candidates[entry_idx].index;
+                Cx[row * k + entry_idx] = candidates[entry_idx].value;
+            } else {
+                Cj[row * k + entry_idx] = -1;
+                Cx[row * k + entry_idx] = -1;
+            }
         }
     }
     return;

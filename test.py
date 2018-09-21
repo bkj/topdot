@@ -81,8 +81,6 @@ if __name__ == "__main__":
     t = time()
     A = sparse.rand(args.dim, args.dim, density=args.density, format='csr')
     B = sparse.rand(args.dim, args.dim, density=args.density, format='csr')
-    A *= 10
-    B *= 10
     gen_time = time() - t
     print('gen_time  ', gen_time, file=sys.stderr)
     
