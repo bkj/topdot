@@ -1,6 +1,13 @@
 # topdot
 
-This is an adaptation of [sparse_dot_topn](https://github.com/ing-bank/sparse_dot_topn)
+Adaptation of [sparse_dot_topn](https://github.com/ing-bank/sparse_dot_topn). 
+
+Primary differences:
+ - OpenMP support (** major speedup **)
+ - Changed output format
+ - Don't sort output
+ - Semantic variable names
+
 
 ## Installation
 ```
